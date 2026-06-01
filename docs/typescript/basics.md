@@ -4,28 +4,21 @@
 
 ## TypeScript 解决了什么问题？
 
-- TypeScript 是 Javascript 的超集
+- 是 Javascript 的超集
 - 提供编译时静态类型检查和强大的开发体验
 - 可以在编写代码时，提供错误信息和代码补全功能
 - 编译后产出纯净、高效的 JavaScript
 - 核心价值是提升大型项目的可维护性和开发效率
 
-## TypeScript 的原始类型有哪些？
+## TypeScript 的基本类型有哪些？
 
-TypeScript 的**原始类型**（Primitive Types）直接对应 JavaScript 的七种原始数据类型：
-
-- **`boolean`** - 布尔值，`true` 或 `false`
-- **`number`** - 双精度浮点数，包括整数、小数、`NaN`、`Infinity` 等
-- **`string`** - 字符串，支持单引号、双引号、模板字符串
-- **`bigint`** - 大整数（ES2020），如 `100n`
-- **`symbol`** - 唯一且不可变的值（ES2015），如 `Symbol('key')`
-- **`undefined`** - 未定义，只有一个值 `undefined`
-- **`null`** - 空值，只有一个值 `null`
-
-> **注意**：
->
-> - `void`、`never`、`any`、`unknown` 等属于 **TypeScript 扩展类型**，并非 JavaScript 原始类型。
-> - 在严格模式下（`strictNullChecks: true`），`null` 和 `undefined` 只能赋值给它们自身或 `void`，不能直接赋给 `number` 等其他原始类型。
+- string
+- number
+- boolean
+- bigint
+- symbol
+- null
+- undefined
 
 ## `any`、`unknown`、`never`、`void` 的区别与使用场景？
 
@@ -43,8 +36,8 @@ TypeScript 的**原始类型**（Primitive Types）直接对应 JavaScript 的�
 ### 相同点
 
 - 类型扩展
-  - interface 通过 extends 扩展类型
-  - type 通过交集扩展类型
+  + interface 通过 extends 扩展类型
+  + type 通过交集扩展类型
 
 ### 不同点
 
@@ -52,6 +45,7 @@ TypeScript 的**原始类型**（Primitive Types）直接对应 JavaScript 的�
 - type 类型别名可以定义基本类型、字面量类型、联合类型、交叉类型、元组等复杂类型
 - interface 定义的类型可以重名，重名的类型会被声明合并
 - type 定义的类型别名不能重名
+
 
 ## 为什么返回非 void 类型的函数可以赋值给返回 void 类型的函数？
 
@@ -68,19 +62,20 @@ callMeMaybe(() => items.push(3));
 
 - [参考文档](https://github.com/Microsoft/TypeScript/wiki/FAQ#why-are-functions-returning-non-void-assignable-to-function-returning-void)
 
+
 ## 说一说协变和逆变？
+
 
 ## infer
 
 - 可以在条件类型中，进行推理，声明新泛型类型变量
-
 ```ts
 type GetReturnType<Type> = Type extends (...args: never[]) => infer Return
   ? Return
   : never;
 ```
 
-## readonly 和 ?
+## readonly 和 ? 
 
 - 都是映射修饰符
 - 通过在前缀前添加 - 或 + 来移除或添加这些修饰符，默认是 +
@@ -131,24 +126,22 @@ const d = new Derived();
 ## 一些特性
 
 - TypeScript 只允许类型断言转换为更具体或更不具体的类型版本，这条规则可以防止诸如以下“不可能”的类型强制转换：
-
 ```ts
 const x = "hello" as number; // error
 ```
-
 - `as const` 可以将整个对象转换成类型字面量
 - `never` 类型可以赋值给任何类型，但是除了 never 本身之外，没有任何类型可以赋值给 never
 - 泛型：
-  - 当指定类型参数时，只需为必需的类型参数指定类型参数即可。未指定的类型参数将解析为其默认类型
+  + 当指定类型参数时，只需为必需的类型参数指定类型参数即可。未指定的类型参数将解析为其默认类型
 
 ## 最佳实践
 
 - 如果类型系统最终会推断出相同的类型，那最好不要添加注解
 - 优先使用 interface 定义类型，直到需要使用类型别名特性时再使用 type 定义类型
-- 编写优秀泛型函数的指南
-  - 尽可能使用类型参数本身，而不是对其进行约束
-  - 尽可能少地使用类型参数
-  - 如果一个类型参数只出现在一个地方，请认真考虑是否真的需要它
-- 编写回调函数类型时，除非打算在不传递参数的情况下调用该函数，否则切勿编写可选 ​​ 参数。
+- 编写优秀泛型函数的指南 
+  + 尽可能使用类型参数本身，而不是对其进行约束
+  + 尽可能少地使用类型参数
+  + 如果一个类型参数只出现在一个地方，请认真考虑是否真的需要它
+- 编写回调函数类型时，除非打算在不传递参数的情况下调用该函数，否则切勿编写可选​​参数。
 - 尽可能优先选择联合类型的参数，而不是重载类型。
 - `object` 不是 `Object` 。 请始终使用 `object` ！
