@@ -1,4 +1,4 @@
-import { defineConfig } from 'vitepress'
+import { defineConfig } from "vitepress";
 import AutoSidebar from "vite-plugin-vitepress-auto-sidebar";
 import { renderSandbox } from "vitepress-plugin-sandpack";
 import container from "markdown-it-container";
@@ -6,7 +6,7 @@ import container from "markdown-it-container";
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   srcDir: "src",
-  
+
   title: "答题卡",
   description: "好好学习，天天向上！",
 
@@ -27,8 +27,6 @@ export default defineConfig({
             basic: { text: "基础", sort: 1 },
             intermediate: { text: "进阶", sort: 2 },
             advanced: { text: "高级", sort: 3 },
-            algorithm: { text: "算法", sort: 4 },
-            "network-secure": { text: "网络及安全", sort: 4 },
           };
           const list = data.map((item) => {
             if (item.text) {
@@ -57,24 +55,22 @@ export default defineConfig({
       { text: "指南", link: "/guide/" },
       {
         text: "前端面试",
-        items: [
-          { text: "Typescript", link: "/typescript/" },
-        ],
+        items: [{ text: "Typescript", link: "/typescript/" }],
       },
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
+      { icon: "github", link: "https://github.com/vuejs/vitepress" },
     ],
 
-     // 尾部
+    // 尾部
     footer: {
       message:
         '本文档由 <a href="https://www.ajuan.me/">ajuan.me</a> 整理，如发现不对之处，请 <a href="https://github.com/Woshiajuana/answer-sheet.ajuan.me/issues">点我勘误</a>',
       copyright: `Copyright © 2022-${new Date().getFullYear()} <a href="https://github.com/woshiajuana">Woshiajuana</a>`,
     },
 
-    outline: 'deep',
+    outline: "deep",
     outlineTitle: "本页目录",
 
     docFooter: {
@@ -111,4 +107,4 @@ export default defineConfig({
   sitemap: {
     hostname: "https://code.daysnap.cn",
   },
-})
+});
