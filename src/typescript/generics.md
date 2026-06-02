@@ -460,5 +460,3 @@ type ElementType<T> = T extends (infer U)[] ? U : T;
 ```typescript
 type DeepAwaited<T> = T extends Promise<infer R> ? DeepAwaited<R> : T;
 ```
-
----

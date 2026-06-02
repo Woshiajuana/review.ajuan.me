@@ -1,6 +1,8 @@
-## 六、高级类型（Advanced Types）· 详细内容补充
+# 高级类型
 
-### 1. 联合类型（Union Types）
+## 知识点
+
+### 联合类型（Union Types）
 
 联合类型表示一个值可以是多种类型中的一种，使用竖线 `|` 分隔。
 
@@ -9,34 +11,42 @@ type Status = "success" | "error" | "loading";
 type ID = string | number;
 
 function printId(id: ID): void {
-    console.log(id);
-    // 不能直接调用 id.toUpperCase()，因为 number 没有这个方法
-    // 需要类型守卫
+  console.log(id);
+  // 不能直接调用 id.toUpperCase()，因为 number 没有这个方法
+  // 需要类型守卫
 }
 ```
 
 **联合类型的属性访问**：只能访问所有类型的共有成员。
 
 ```typescript
-interface Bird { fly(): void; layEggs(): void; }
-interface Fish { swim(): void; layEggs(): void; }
+interface Bird {
+  fly(): void;
+  layEggs(): void;
+}
+interface Fish {
+  swim(): void;
+  layEggs(): void;
+}
 type Pet = Bird | Fish;
 let pet: Pet;
-pet.layEggs();   // ✅ 共有方法
-pet.fly();       // ❌ 不是所有类型都有 fly
+pet.layEggs(); // ✅ 共有方法
+pet.fly(); // ❌ 不是所有类型都有 fly
 ```
 
-### 2. 交叉类型（Intersection Types）
+---
+
+### 交叉类型（Intersection Types）
 
 交叉类型将多个类型合并成一个新类型，使用 `&` 符号。新类型包含所有类型的成员。
 
 ```typescript
 type Person = { name: string };
 type Employee = { id: number };
-type Staff = Person & Employee;   // { name: string; id: number }
+type Staff = Person & Employee; // { name: string; id: number }
 
 function merge<T, U>(a: T, b: U): T & U {
-    return { ...a, ...b };
+  return { ...a, ...b };
 }
 ```
 
@@ -46,7 +56,9 @@ function merge<T, U>(a: T, b: U): T & U {
 type Conflict = { x: string } & { x: number }; // x 为 never
 ```
 
-### 3. 类型守卫（Type Guards）
+---
+
+### 类型守卫（Type Guards）
 
 类型守卫是运行时检查，用于在代码块内缩小类型范围。
 
@@ -54,39 +66,47 @@ type Conflict = { x: string } & { x: number }; // x 为 never
 
 ```typescript
 function padLeft(value: string | number, padding: number): string {
-    if (typeof value === "string") {
-        return value.padStart(padding, " ");
-    } else {
-        return value.toString().padStart(padding, " ");
-    }
+  if (typeof value === "string") {
+    return value.padStart(padding, " ");
+  } else {
+    return value.toString().padStart(padding, " ");
+  }
 }
 ```
 
 #### `instanceof` 类型守卫（类实例）
 
 ```typescript
-class Dog { bark() {} }
-class Cat { meow() {} }
+class Dog {
+  bark() {}
+}
+class Cat {
+  meow() {}
+}
 function makeSound(animal: Dog | Cat) {
-    if (animal instanceof Dog) {
-        animal.bark();
-    } else {
-        animal.meow();
-    }
+  if (animal instanceof Dog) {
+    animal.bark();
+  } else {
+    animal.meow();
+  }
 }
 ```
 
 #### `in` 操作符守卫（属性检查）
 
 ```typescript
-interface Bird { fly(): void; }
-interface Fish { swim(): void; }
+interface Bird {
+  fly(): void;
+}
+interface Fish {
+  swim(): void;
+}
 function move(animal: Bird | Fish) {
-    if ("fly" in animal) {
-        animal.fly();
-    } else {
-        animal.swim();
-    }
+  if ("fly" in animal) {
+    animal.fly();
+  } else {
+    animal.swim();
+  }
 }
 ```
 
@@ -94,15 +114,15 @@ function move(animal: Bird | Fish) {
 
 ```typescript
 function isFish(pet: Fish | Bird): pet is Fish {
-    return (pet as Fish).swim !== undefined;
+  return (pet as Fish).swim !== undefined;
 }
 
 function feed(pet: Fish | Bird) {
-    if (isFish(pet)) {
-        pet.swim();   // pet 被收窄为 Fish
-    } else {
-        pet.fly();    // pet 被收窄为 Bird
-    }
+  if (isFish(pet)) {
+    pet.swim(); // pet 被收窄为 Fish
+  } else {
+    pet.fly(); // pet 被收窄为 Bird
+  }
 }
 ```
 
@@ -110,50 +130,57 @@ function feed(pet: Fish | Bird) {
 
 ```typescript
 function assertIsString(val: any): asserts val is string {
-    if (typeof val !== "string") {
-        throw new Error("Not a string");
-    }
+  if (typeof val !== "string") {
+    throw new Error("Not a string");
+  }
 }
 function process(val: any) {
-    assertIsString(val);
-    val.toUpperCase(); // val 被收窄为 string
+  assertIsString(val);
+  val.toUpperCase(); // val 被收窄为 string
 }
 ```
 
-### 4. 可辨识联合（Discriminated Unions）
+---
+
+### 可辨识联合（Discriminated Unions）
 
 可辨识联合是一种模式：联合类型的每个成员都有一个相同的字面量类型属性（**可辨识特征**），TypeScript 可以据此精确收窄类型。
 
 ```typescript
 interface Square {
-    kind: "square";
-    size: number;
+  kind: "square";
+  size: number;
 }
 interface Circle {
-    kind: "circle";
-    radius: number;
+  kind: "circle";
+  radius: number;
 }
 interface Triangle {
-    kind: "triangle";
-    side: number;
+  kind: "triangle";
+  side: number;
 }
 type Shape = Square | Circle | Triangle;
 
 function area(shape: Shape): number {
-    switch (shape.kind) {
-        case "square": return shape.size ** 2;
-        case "circle": return Math.PI * shape.radius ** 2;
-        case "triangle": return (Math.sqrt(3) / 4) * shape.side ** 2;
-        default:
-            const _exhaustive: never = shape; // 穷尽性检查
-            return _exhaustive;
-    }
+  switch (shape.kind) {
+    case "square":
+      return shape.size ** 2;
+    case "circle":
+      return Math.PI * shape.radius ** 2;
+    case "triangle":
+      return (Math.sqrt(3) / 4) * shape.side ** 2;
+    default:
+      const _exhaustive: never = shape; // 穷尽性检查
+      return _exhaustive;
+  }
 }
 ```
 
 **优点**：类型安全、易于扩展、编译时检查遗漏分支。
 
-### 5. 类型断言（Type Assertion）
+---
+
+### 类型断言（Type Assertion）
 
 告诉编译器“我知道这个值的类型”，不做运行时转换。
 
@@ -168,18 +195,22 @@ let strLength: number = (someValue as string).length;
 let x = "hello" as unknown as number; // 危险，但不报错
 ```
 
-### 6. 非空断言（Non-null Assertion）`!`
+---
+
+### 非空断言（Non-null Assertion）`!`
 
 后缀 `!` 从类型中排除 `null` 和 `undefined`。
 
 ```typescript
 function processInput(input: string | null) {
-    // 假设我们知道 input 不为空
-    const value = input!.toUpperCase();
+  // 假设我们知道 input 不为空
+  const value = input!.toUpperCase();
 }
 ```
 
-### 7. 索引类型（Index Types）
+---
+
+### 索引类型（Index Types）
 
 #### `keyof` 操作符
 
@@ -187,8 +218,8 @@ function processInput(input: string | null) {
 
 ```typescript
 interface Person {
-    name: string;
-    age: number;
+  name: string;
+  age: number;
 }
 type PersonKeys = keyof Person; // "name" | "age"
 ```
@@ -199,7 +230,7 @@ type PersonKeys = keyof Person; // "name" | "age"
 
 ```typescript
 type NameType = Person["name"]; // string
-type AgeType = Person["age"];   // number
+type AgeType = Person["age"]; // number
 type Values = Person[keyof Person]; // string | number
 ```
 
@@ -209,29 +240,32 @@ type Values = Person[keyof Person]; // string | number
 
 ```typescript
 interface StringMap {
-    [key: string]: string;
+  [key: string]: string;
 }
 ```
 
-### 8. 映射类型（Mapped Types）
+---
+
+### 映射类型（Mapped Types）
 
 基于旧类型创建新类型，使用 `[P in K]` 语法。
 
 ```typescript
 type Readonly<T> = {
-    readonly [P in keyof T]: T[P];
+  readonly [P in keyof T]: T[P];
 };
 
 type Partial<T> = {
-    [P in keyof T]?: T[P];
+  [P in keyof T]?: T[P];
 };
 
 type Nullable<T> = {
-    [P in keyof T]: T[P] | null;
+  [P in keyof T]: T[P] | null;
 };
 ```
 
 **内置映射类型**：
+
 - `Partial<T>`：所有属性可选
 - `Required<T>`：所有属性必选
 - `Readonly<T>`：所有属性只读
@@ -243,19 +277,21 @@ type Nullable<T> = {
 
 ```typescript
 type Getters<T> = {
-    [K in keyof T as `get${Capitalize<string & K>}`]: () => T[K];
+  [K in keyof T as `get${Capitalize<string & K>}`]: () => T[K];
 };
 // 示例：{ name: string } -> { getName: () => string }
 ```
 
-### 9. 条件类型（Conditional Types）
+---
+
+### 条件类型（Conditional Types）
 
 根据类型关系选择不同的类型，语法：`T extends U ? X : Y`。
 
 ```typescript
 type IsString<T> = T extends string ? true : false;
 type A = IsString<"hello">; // true
-type B = IsString<number>;  // false
+type B = IsString<number>; // false
 ```
 
 **分布式条件类型**：当 `T` 是联合类型时，条件类型会分发到每个成员。
@@ -276,11 +312,13 @@ type PromiseResolve<T> = T extends Promise<infer U> ? U : T;
 
 ```typescript
 type DeepReadonly<T> = {
-    readonly [P in keyof T]: DeepReadonly<T[P]>;
+  readonly [P in keyof T]: DeepReadonly<T[P]>;
 };
 ```
 
-### 10. 模板字面量类型（Template Literal Types，TS 4.1+）
+---
+
+### 模板字面量类型（Template Literal Types，TS 4.1+）
 
 基于字符串字面量类型创建新字符串类型，语法同 ES6 模板字符串。
 
@@ -295,12 +333,15 @@ type ClickEvent = EventName<"click">; // "onClick"
 ```
 
 **内置字符串操作类型**：
+
 - `Uppercase<S>`：将字符串字面量转为大写
 - `Lowercase<S>`：转小写
 - `Capitalize<S>`：首字母大写
 - `Uncapitalize<S>`：首字母小写
 
-### 11. 类型查询（`typeof`）
+---
+
+### 类型查询（`typeof`）
 
 在类型上下文中获取变量或属性的类型。
 
@@ -308,23 +349,31 @@ type ClickEvent = EventName<"click">; // "onClick"
 const config = { api: "https://example.com", port: 8080 };
 type Config = typeof config; // { api: string; port: number; }
 
-function getConfig(): Config { return config; }
+function getConfig(): Config {
+  return config;
+}
 ```
 
 **注意**：`typeof` 在类型上下文和值上下文中的区别。
 
 ```typescript
-let s = "hello";           // 值
-type T = typeof s;         // string 类型
+let s = "hello"; // 值
+type T = typeof s; // string 类型
 ```
 
-### 12. 类型兼容性（Type Compatibility）
+---
+
+### 类型兼容性（Type Compatibility）
 
 TypeScript 采用结构化类型系统（structural typing），只要求成员兼容即可，不要求名义相同。
 
 ```typescript
-interface Named { name: string; }
-class Person { name: string = ""; }
+interface Named {
+  name: string;
+}
+class Person {
+  name: string = "";
+}
 let p: Named = new Person(); // ✅ 结构兼容
 
 // 函数类型兼容性：参数可以少但不能多（逆变）
@@ -335,37 +384,37 @@ fn1 = fn2; // ✅ 可赋值（参数少）
 ```
 
 **协变与逆变**：
+
 - 返回值类型是协变的：子类可以返回更具体的类型。
 - 参数类型是逆变的：子类可以接受更宽泛的类型（strictFunctionTypes 下）。
 
-### 13. 内置高级工具类型补充
-
-| 工具类型 | 作用 |
-|---------|------|
-| `Exclude<T, U>` | 从 T 中排除可赋值给 U 的类型 |
-| `Extract<T, U>` | 从 T 中提取可赋值给 U 的类型 |
-| `NonNullable<T>` | 从 T 中排除 null 和 undefined |
-| `ReturnType<T>` | 函数 T 的返回值类型 |
-| `Parameters<T>` | 函数 T 的参数类型元组 |
-| `ConstructorParameters<T>` | 构造函数参数类型元组 |
-| `InstanceType<T>` | 构造函数实例类型 |
-| `ThisParameterType<T>` | 函数 this 参数类型 |
-| `OmitThisParameter<T>` | 移除函数 this 参数后的类型 |
-| `Awaited<T>` | 递归解包 Promise 类型 |
-
 ---
 
-## 涉及到的面试题与最佳回答
+### 内置高级工具类型补充
 
-### 面试题 1：联合类型和交叉类型的区别是什么？分别适用于什么场景？
+| 工具类型                   | 作用                          |
+| -------------------------- | ----------------------------- |
+| `Exclude<T, U>`            | 从 T 中排除可赋值给 U 的类型  |
+| `Extract<T, U>`            | 从 T 中提取可赋值给 U 的类型  |
+| `NonNullable<T>`           | 从 T 中排除 null 和 undefined |
+| `ReturnType<T>`            | 函数 T 的返回值类型           |
+| `Parameters<T>`            | 函数 T 的参数类型元组         |
+| `ConstructorParameters<T>` | 构造函数参数类型元组          |
+| `InstanceType<T>`          | 构造函数实例类型              |
+| `ThisParameterType<T>`     | 函数 this 参数类型            |
+| `OmitThisParameter<T>`     | 移除函数 this 参数后的类型    |
+| `Awaited<T>`               | 递归解包 Promise 类型         |
 
-**最佳回答**：
+## 面试题
+
+### 联合类型和交叉类型的区别是什么？分别适用于什么场景？
 
 - **联合类型**（`A | B`）：表示值可能是 A 或 B 中的一种。只能访问 A 和 B 共有的成员。适用于一个值可以有多种不同类型的场景，如 API 响应可能是成功数据或错误信息，函数参数可以接受字符串或数字。
 
 - **交叉类型**（`A & B`）：表示值必须同时满足 A 和 B 的所有成员。新类型拥有 A 和 B 的所有属性。适用于对象合并、混入（mixin）等场景，如将两个对象合并成一个。
 
 **示例对比**：
+
 ```typescript
 // 联合类型：ID 可以是字符串或数字
 type ID = string | number;
@@ -380,17 +429,16 @@ type ColoredSized = Colored & Sized; // { color: string; size: number }
 
 ---
 
-### 面试题 2：什么是可辨识联合（Discriminated Union）？它解决了什么问题？
-
-**最佳回答**：
+### 什么是可辨识联合（Discriminated Union）？它解决了什么问题？
 
 可辨识联合是一种模式：联合类型的每个成员都包含一个共同的、字面量类型的属性（称为“可辨识特征”或“tag”），TypeScript 可以利用该属性进行类型收窄，实现类型安全的处理。
 
 **解决的问题**：当联合类型成员有不同属性时，直接处理需要繁琐的类型守卫。可辨识联合通过一个公共字段区分成员，使得类型收窄简单可靠，并且可以利用 `switch` 做到穷尽性检查。
 
 **示例**：
+
 ```typescript
-type Action = 
+type Action =
     | { type: "ADD"; payload: number }
     | { type: "REMOVE"; id: string }
     | { type: "RESET" };
@@ -411,9 +459,7 @@ function reducer(state: any, action: Action) {
 
 ---
 
-### 面试题 3：自定义类型守卫（`is`）和断言函数（`asserts`）有什么区别？
-
-**最佳回答**：
+### 自定义类型守卫（`is`）和断言函数（`asserts`）有什么区别？
 
 - **自定义类型守卫**（`value is Type`）：返回布尔值，用于 `if` 条件中。如果返回 `true`，则传入的值在该作用域内被收窄为指定类型。
 
@@ -428,46 +474,46 @@ function reducer(state: any, action: Action) {
 | 适用场景 | 可恢复的检查 | 前置条件验证（如参数校验） |
 
 **示例**：
+
 ```typescript
 // is 守卫
 function isString(val: unknown): val is string {
-    return typeof val === "string";
+  return typeof val === "string";
 }
 function test1(val: unknown) {
-    if (isString(val)) {
-        val.toUpperCase(); // val 为 string
-    }
+  if (isString(val)) {
+    val.toUpperCase(); // val 为 string
+  }
 }
 
 // asserts 断言
 function assertString(val: unknown): asserts val is string {
-    if (typeof val !== "string") throw new Error("Not a string");
+  if (typeof val !== "string") throw new Error("Not a string");
 }
 function test2(val: unknown) {
-    assertString(val);
-    val.toUpperCase(); // 直接使用，无需 if
+  assertString(val);
+  val.toUpperCase(); // 直接使用，无需 if
 }
 ```
 
 ---
 
-### 面试题 4：映射类型和索引类型有什么区别？如何实现一个 `Readonly<T>` 和 `Partial<T>`？
-
-**最佳回答**：
+### 映射类型和索引类型有什么区别？如何实现一个 `Readonly<T>` 和 `Partial<T>`？
 
 - **索引类型**：指 `keyof` 和 `T[K]`，用于访问类型的键和属性值类型。是映射类型的基础。
 - **映射类型**：基于旧类型创建新类型，使用 `[P in keyof T]` 遍历键，并可添加修饰符（`readonly`、`?`）。
 
 **实现**：
+
 ```typescript
 // Readonly<T>
 type Readonly<T> = {
-    readonly [P in keyof T]: T[P];
+  readonly [P in keyof T]: T[P];
 };
 
 // Partial<T>
 type Partial<T> = {
-    [P in keyof T]?: T[P];
+  [P in keyof T]?: T[P];
 };
 ```
 
@@ -475,9 +521,7 @@ type Partial<T> = {
 
 ---
 
-### 面试题 5：什么是条件类型？解释分布式条件类型和 `infer` 的用法。
-
-**最佳回答**：
+### 什么是条件类型？解释分布式条件类型和 `infer` 的用法。
 
 **条件类型**：`T extends U ? X : Y`，根据类型关系选择类型。它可以在类型层面实现逻辑判断。
 
@@ -495,7 +539,7 @@ type Result = ToArray<string | number>; // string[] | number[]（而非 (string|
 type UnwrapPromise<T> = T extends Promise<infer U> ? U : T;
 
 type T1 = UnwrapPromise<Promise<string>>; // string
-type T2 = UnwrapPromise<number>;          // number
+type T2 = UnwrapPromise<number>; // number
 
 // 递归提取
 type DeepUnwrap<T> = T extends Promise<infer U> ? DeepUnwrap<U> : T;
@@ -505,62 +549,72 @@ type DeepUnwrap<T> = T extends Promise<infer U> ? DeepUnwrap<U> : T;
 
 ---
 
-### 面试题 6：模板字面量类型有什么用途？请结合事件处理函数场景举例。
-
-**最佳回答**：
+### 模板字面量类型有什么用途？请结合事件处理函数场景举例。
 
 模板字面量类型允许根据字符串字面量类型动态生成新的字符串字面量类型，常用于构建类型安全的字符串模式（如 CSS 类名、事件名、路由路径）。
 
 **事件处理函数场景**：
+
 ```typescript
 type EventName = "click" | "focus" | "blur";
 type HandlerName = `on${Capitalize<EventName>}`; // "onClick" | "onFocus" | "onBlur"
 
 interface EventMap {
-    onClick: (e: MouseEvent) => void;
-    onFocus: (e: FocusEvent) => void;
-    onBlur: (e: FocusEvent) => void;
+  onClick: (e: MouseEvent) => void;
+  onFocus: (e: FocusEvent) => void;
+  onBlur: (e: FocusEvent) => void;
 }
 
-function addListener<K extends keyof EventMap>(
-    name: K,
-    handler: EventMap[K]
-) { /* ... */ }
+function addListener<K extends keyof EventMap>(name: K, handler: EventMap[K]) {
+  /* ... */
+}
 
 addListener("onClick", (e) => {}); // e 自动为 MouseEvent
 ```
 
 **其他用途**：
+
 - 类型安全的 CSS 类名组合：`${BaseClass}--${Variant}`
 - 路由参数匹配：`/users/${string}/posts/${string}`
 - 构建 DSL（领域特定语言）类型。
 
 ---
 
-### 面试题 7：如何理解 TypeScript 的结构化类型系统？与名义类型系统有何不同？
-
-**最佳回答**：
+### 如何理解 TypeScript 的结构化类型系统？与名义类型系统有何不同？
 
 TypeScript 使用结构化类型系统（又称“鸭子类型”）：类型兼容性基于成员的实际结构，而不是类型的名称或声明位置。
 
 **示例**：
+
 ```typescript
-interface Point { x: number; y: number; }
-interface Vector { x: number; y: number; }
+interface Point {
+  x: number;
+  y: number;
+}
+interface Vector {
+  x: number;
+  y: number;
+}
 let p: Point = { x: 1, y: 2 };
 let v: Vector = p; // ✅ 结构相同，允许
 ```
 
 **与名义类型系统对比**（如 Java、C#）：
+
 - 名义系统要求类型名称相同或显式继承关系。
 - 结构化系统更灵活，适合 JavaScript 的动态特性，但可能意外兼容（如上例）。
 
 **如何模拟名义类型**（如果需要）：
+
 ```typescript
 // 使用品牌/标签
-interface NominalPoint { _brand: "point"; x: number; y: number; }
+interface NominalPoint {
+  _brand: "point";
+  x: number;
+  y: number;
+}
 function createPoint(x: number, y: number): NominalPoint {
-    return { _brand: "point", x, y };
+  return { _brand: "point", x, y };
 }
 // 现在不同标签的类型不兼容
 ```
@@ -569,9 +623,7 @@ function createPoint(x: number, y: number): NominalPoint {
 
 ---
 
-### 面试题 8：`Exclude<T, U>` 和 `Extract<T, U>` 是如何实现的？请手写。
-
-**最佳回答**：
+### `Exclude<T, U>` 和 `Extract<T, U>` 是如何实现的？请手写。
 
 利用条件类型的分布式特性实现：
 
@@ -584,13 +636,10 @@ type Extract<T, U> = T extends U ? T : never;
 ```
 
 **示例**：
+
 ```typescript
 type T1 = Exclude<"a" | "b" | "c", "a" | "b">; // "c"
 type T2 = Extract<"a" | "b" | "c", "a" | "b">; // "a" | "b"
 ```
 
 **原理**：联合类型分发，`never` 在联合中会被自动过滤掉。
-
----
-
-以上是对“高级类型”知识点的全面补充及常见面试题的最佳回答。掌握这些内容可以帮助你灵活运用 TypeScript 的类型系统，写出类型安全且高度抽象的代码。
