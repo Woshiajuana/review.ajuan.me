@@ -55,7 +55,10 @@ export default defineConfig({
       { text: "指南", link: "/guide/" },
       {
         text: "前端面试",
-        items: [{ text: "Typescript", link: "/typescript/" }],
+        items: [
+          { text: "HTML & CSS", link: "/html&css/" },
+          { text: "Typescript", link: "/typescript/" },
+        ],
       },
     ],
 
