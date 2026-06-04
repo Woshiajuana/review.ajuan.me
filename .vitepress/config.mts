@@ -20,23 +20,13 @@ export default defineConfig({
         path: "src",
         titleFromFile: true,
         sideBarItemsResolved(data) {
-          // 转换文案
-          const mapping = {
-            index: { text: "指南", sort: -1 },
-            guide: { text: "指南", sort: -1 },
-            basic: { text: "基础", sort: 1 },
-            intermediate: { text: "进阶", sort: 2 },
-            advanced: { text: "高级", sort: 3 },
-          };
           const list = data.map((item) => {
-            if (item.text) {
-              Object.assign(item, mapping[item.text] ?? {});
-            }
-            return { sort: 99, ...item };
+            return { sort: item.text === "指南" ? -1 : 99, ...item };
           });
 
           // 排序
           list.sort((a, b) => a.sort - b.sort);
+
           return list;
         },
       }) as any,
