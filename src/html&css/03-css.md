@@ -357,7 +357,7 @@ selector {
 - 尽量只给一个方向设置 margin（如只使用 `margin-bottom` 或 `margin-top`）。
 - 使用 `padding` 替代 `margin`（对于父子场景）。
 
-**注意**：水平方向 margin 不会合并（只有垂直方向在块级格式化上下文中合并）。
+**注意**：水平方向 margin 不会合并（只有垂直方向会合并）。
 
 ---
 

@@ -113,7 +113,7 @@
   - `_parent` / `_top`（框架相关）
 - `title`：鼠标悬停提示。
 - `download`：指示浏览器下载而不是导航（仅同源或某些条件）。
-- `rel`：定义当前文档与链接文档的关系（如 `nofollow`、`noopener`、`noreferrer`）。
+- `rel`：定义当前文档与链接文档的关系（如 `nofollow`、`noopener`、`noreferrer`、`nofollow`）。
 
 #### 锚点跳转
 
