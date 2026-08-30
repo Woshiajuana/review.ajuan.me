@@ -43,11 +43,12 @@ export default defineConfig({
     nav: [
       { text: "首页", link: "/" },
       { text: "指南", link: "/guide/" },
+      { text: "学习笔记", items: [{ text: "MySQL", link: "/notes/mysql/" }] },
       {
         text: "前端面试",
         items: [
-          { text: "HTML & CSS", link: "/html&css/" },
-          { text: "Typescript", link: "/typescript/" },
+          { text: "HTML & CSS", link: "/interviews/html&css/" },
+          { text: "Typescript", link: "/interviews/typescript/" },
         ],
       },
     ],
