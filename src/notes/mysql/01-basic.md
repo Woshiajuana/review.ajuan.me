@@ -187,7 +187,9 @@ DROP TABLE employees;
 
 > ALTER TABLE 表名 DROP COLUMN 列名;
 
-### 添加主键约束
+### 主键约束
+
+- 添加主键
 
 > ALTER TABLE 表名 ADD PRIMARY KEY(列名);
 
@@ -195,21 +197,21 @@ DROP TABLE employees;
 ALTER TABLE test ADD PRIMARY KEY(id)
 ```
 
-### 主键自增长
-
-添加自增长
+- 添加自增长
 
 > ALTER TABLE 表名 MODIFY 主键 类型 AUTO_INCREMENT;
 
-去掉自增长
+- 去掉自增长
 
 > ALTER TABLE 表名 MODIFY 主键 类型;
 
-### 删除主键
+- 删除主键
 
 > ALTER TABLE 表名 DROP PRIMARY KEY;
 
-### 添加外键约束
+### 外键约束
+
+- 添加外键
 
 > ALTER TABLE 表名 ADD CONSTRAINT 约束名 FOREIGN KEY(列名) REFERENCES 参照的表名(参照的列名);
 
@@ -217,6 +219,134 @@ ALTER TABLE test ADD PRIMARY KEY(id)
 ALTER TABLE emp ADD CONSTRAINT emp_fk FOREIGN KEY(dept_id) REFERENCES departments(department_id);
 ```
 
-### 删除外键约束
+- 删除外键
 
 > ALTER TABLE 表名 DROP FOREIGN KEY 约束名;
+
+### 唯一性约束
+
+- 添加唯一性约束
+
+> ALTER TABLE 表名 ADD CONSTRAINT 约束名 UNIQUE(列名);
+
+```sql
+ALTER TABLE emp ADD CONSTRAINT emp_uk UNIQUE(name);
+```
+
+- 删除唯一性约束
+
+> ALTER TABLE 表名 DROP KEY 约束名;
+
+```sql
+ALTER TABLE emp DROP KEY emp_uk;
+```
+
+### 非空约束（Not Null）
+
+- 添加非空约束
+
+> ALTER TABLE 表名 MODIFY 列名 类型 NOT NULL;
+
+- 删除非空约束
+
+> ALTER TABLE 表名 MODIFY 列名 类型 NULL;
+
+### 查询表的约束信息
+
+> SHOW KEYS FROM 表名;
+
+### 查看表的信息
+
+> DESC 表名;
+
+### 添加数据（INSERT）
+
+- 选择插入
+
+> INSERT INTO 表名(列名 1, 列名 2, 列名 3...) VALUES (值 1, 值 2, 值 3...);
+
+```sql
+INSERT INTO deps(name, location_id) VALUES("张三", 1);
+```
+
+- 完全插入
+
+> INSERT INTO 表名 VALUES(值 1, 值 2, 值 3...)
+
+注意主键如果是自动增长，需要使用 default 或者 null 或者 0 占位。
+
+```sql
+INSERT INTO deps VALUES(DEFAULT, "李四", 2)
+```
+
+### 默认值处理（DEFAULT）
+
+- 创建的时候添加默认值
+
+> CREATE TABLE 表名(列名 类型 DEFAULT 默认值, ...);
+
+```sql
+CREATE TABLE emps(
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(10),
+  address VARCHAR(50) DEFAULT 'Unknown'
+);
+```
+
+- 修改的时候添加默认值
+
+> ALTER TABLE 表名 ADD COLUMN 列名 类型 DEFAULT 默认值;
+
+- 插入数据时候默认值处理
+
+需要使用 default 来占位
+
+```sql
+INSERT INTO emps VALUES(DEFAULT, 'a', DEFAULT);
+```
+
+### 更新数据（UPDATE）
+
+> UPDATE 表名 SET 列名=值, 列名=值 WHERE 条件;
+
+更新语句中一定要给定更新条件，否则表中所有的数据都会被更新
+
+```sql
+UPDATE emps SET address='北京' WHERE id=1;
+```
+
+### 删除数据（DELETE）
+
+- 删除数据
+
+> DELETE FROM 表名 WHERE 条件;
+
+在 DELETE 语句中，如果没有给定删除条件，则会删除表中的所有数据。
+
+- 清空表
+
+> TRUNCATE TABLE 表名;
+
+两者区别
+
+- truncate 是整体删除(速度较快)，delete 是逐条删除（速度较慢）
+- truncate 不写服务器 log，delete 写服务器 log
+- truncate 是会重置自增值，相当于自增列会被置为初始值，又重新从 1 开始记录。而 delete 删除以后，自增值仍然会继续累加
+
+## 查询语句
+
+### 选择所有列
+
+> SELECT \* FROM 表名;
+
+### 指定列
+
+> SELECT 列名, 列名 FROM 表名;
+
+### 查询中的算术表达式
+
+> SELECT 列名, 列名 + 300 FROM 表名;
+
+```sql
+SELECT name, salary, salary + 300 FROM employees;
+```
