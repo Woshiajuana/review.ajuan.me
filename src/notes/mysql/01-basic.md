@@ -350,3 +350,130 @@ UPDATE emps SET address='北京' WHERE id=1;
 ```sql
 SELECT name, salary, salary + 300 FROM employees;
 ```
+
+### 别名
+
+- 使用列别名
+
+> SELECT 列名 AS 列别名 FROM 表名 WHERE 条件;
+> SELECT 列名 列别名 FROM 表名 WHERE 条件;
+
+- 使用表别名
+
+> SELECT 表别名.列名 FROM 表名 AS 表别名 WHERE 条件;
+> SELECT 表别名.列名 FROM 表名 表别名 WHERE 条件;
+
+```sql
+SELECT emp.last_name name FROM employees emp;
+```
+
+### 去除重复
+
+> SELECT DISTINCT 列名 FROM 表名;
+
+```sql
+SELECT DISTINCT department_id FROM employees;
+```
+
+### 条件查询
+
+> SELECT \* | 投影列 FROM 表名 WHERE 选择条件;
+
+### 比较条件
+
+- >
+- <
+- >
+- =
+- <=
+- != 、 <>
+- BETWEEN ... AND ... 在两个值之间(包含)
+
+```sql
+SELECT last_name, salary
+FROM employees
+WHERE salary BETWEEN 2500 AND 3500;
+```
+
+- IN(set) 匹配一个任意值列表
+
+```sql
+SELECT employee_id, last_name, salary, manager_id
+FROM employees
+WHERE manager_id IN(100, 101, 201);
+```
+
+- LIKE 匹配一个字符串模板
+  - `%` 表示 0 个或多个字符
+  - `_` 表示一个字符
+
+```sql
+SELECT first_name
+FROM employees
+WHERE first_name LIKE 'S%';
+```
+
+- NULL 条件
+  - IS NULL 是一个空值
+  - IS NOT NULL
+
+```sql
+SELECT last_name, manager_id
+FROM employees
+WHERE manager_id IS NULL;
+```
+
+### 逻辑条件
+
+- AND
+
+```sql
+SELECT last_name, salary FROM employees WHERE salary = 8000 AND last_name LIKE '%e%';
+```
+
+- OR
+
+```sql
+SELECT last_name, salary FROM employees WHERE salary = 8000 OR last_name LIKE '%e%';
+```
+
+- NOT
+
+```sql
+SELECT last_name FROM employees WHERE last_name NOT LIKE '%u%';
+```
+
+### 优先规则
+
+1. 算术运算
+2. 连字操作
+3. 比较操作
+4. IS [NOT] NULL, LIKE, [NOT] IN
+5. [NOT] BETWEEN
+6. NOT 逻辑条件
+7. AND 逻辑条件
+8. OR 逻辑条件
+
+使用圆括号改变优先规则
+
+### ORDER BY 排序
+
+- `ASC` 升序排序，默认
+- `DESC` 降序排序
+
+```sql
+SELECT last_name, job_id, department_id, hire_date
+FROM employees
+ORDER BY hire_date;
+```
+
+```sql
+SELECT department_id, salary FROM employees ORDER BY department_id ASC, salary DESC;
+```
+
+### SELECT 语句的执行顺序如下
+
+1. FORM 子句
+2. WHERE 子句
+3. SELECT 子句
+4. ORDER BY 子句
