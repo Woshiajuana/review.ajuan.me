@@ -135,6 +135,7 @@
 
 - float(m,d)：单精度浮点型，8 位精度（4 字节），m 总个数，d 小数位
 - double(m,d)：双精度浮点型，16 位精度（8 字节），m 总个数，d 小数位
+- decimal(m,d)：双精度浮点型，16 位精度（8 字节），m 总个数，d 小数位
 
 ### 字符类型
 
@@ -440,7 +441,7 @@ SELECT DISTINCT department_id FROM employees;
 
 - >
 - <
-- >=
+- > =
 - =
 - <=
 - != 、 <>
