@@ -3,7 +3,7 @@
 layout: home
 
 hero:
-  name: 答题卡
+  name: 复习鸭
   text: 挑战编程，共赴面试之旅！
   tagline: 好好学习，天天向上！！！
   actions:
@@ -12,7 +12,7 @@ hero:
       link: /guide/
     - theme: alt
       text: 在GitHub上查看
-      link: https://github.com/Woshiajuana/answer-sheet.ajuan.me
+      link: https://github.com/Woshiajuana/review.ajuan.me
 
 features:
   - title: 丰富题库
@@ -24,4 +24,3 @@ features:
   - title: 引用和出处
     details: 对于引用的资料或外部链接，提供明确的引用和出处。尊重他人的知识产权，并确保内容来源的准确性。
 ---
-

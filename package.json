@@ -1,25 +1,24 @@
 {
-  "name": "answer-sheet.ajuan.me",
+  "name": "review.ajuan.me",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "复习、学习网站",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "vitepress dev --port 12580",
+    "dev": "vitepress dev --host --port 12580",
     "build": "vitepress build",
     "preview": "vitepress preview"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Woshiajuana/answer-sheet.ajuan.me.git"
+    "url": "git+https://github.com/Woshiajuana/review.ajuan.me.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Woshiajuana/answer-sheet.ajuan.me/issues"
+    "url": "https://github.com/Woshiajuana/review.ajuan.me/issues"
   },
-  "homepage": "https://github.com/Woshiajuana/answer-sheet.ajuan.me#readme",
+  "homepage": "https://github.com/Woshiajuana/review.ajuan.me#readme",
   "devDependencies": {
     "markdown-it-container": "^4.0.0",
     "sass": "1.69.7",

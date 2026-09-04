@@ -7,7 +7,7 @@ import container from "markdown-it-container";
 export default defineConfig({
   srcDir: "src",
 
-  title: "答题卡",
+  title: "复习鸭",
   description: "好好学习，天天向上！",
 
   head: [["link", { rel: "icon", href: "/favicon.ico" }]],
@@ -36,14 +36,16 @@ export default defineConfig({
   // 主题设置
   themeConfig: {
     // logo
-    logo: "/assets/logo.png",
-    siteTitle: "答题卡",
+    logo: "/assets/logo.webp",
+    siteTitle: "复习鸭",
 
     // https://vitepress.dev/reference/default-theme-config
     nav: [
-      { text: "首页", link: "/" },
-      { text: "指南", link: "/guide/" },
-      { text: "学习笔记", items: [{ text: "MySQL", link: "/notes/mysql/" }] },
+      { text: "MySQL", link: "/mysql/basic" },
+      {
+        text: "学习笔记",
+        items: [{ text: "MySQL", link: "/notes/mysql/basic" }],
+      },
       {
         text: "前端面试",
         items: [
@@ -60,7 +62,7 @@ export default defineConfig({
     // 尾部
     footer: {
       message:
-        '本文档由 <a href="https://www.ajuan.me/">ajuan.me</a> 整理，如发现不对之处，请 <a href="https://github.com/Woshiajuana/answer-sheet.ajuan.me/issues">点我勘误</a>',
+        '本文档由 <a href="https://www.ajuan.me/">ajuan.me</a> 整理，如发现不对之处，请 <a href="https://github.com/Woshiajuana/review.ajuan.me/issues">点我勘误</a>',
       copyright: `Copyright © 2022-${new Date().getFullYear()} <a href="https://github.com/woshiajuana">Woshiajuana</a>`,
     },
 
