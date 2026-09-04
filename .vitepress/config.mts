@@ -19,16 +19,8 @@ export default defineConfig({
       AutoSidebar({
         path: "src",
         titleFromFile: true,
-        sideBarItemsResolved(data) {
-          const list = data.map((item) => {
-            return { sort: item.text === "指南" ? -1 : 99, ...item };
-          });
-
-          // 排序
-          list.sort((a, b) => a.sort - b.sort);
-
-          return list;
-        },
+        collapsed: false,
+        ignoreIndexItem: true,
       }) as any,
     ],
   },
@@ -41,13 +33,9 @@ export default defineConfig({
 
     // https://vitepress.dev/reference/default-theme-config
     nav: [
-      { text: "MySQL", link: "/mysql/basic" },
+      { text: "MySQL", link: "/mysql/01-basic" },
       {
-        text: "学习笔记",
-        items: [{ text: "MySQL", link: "/notes/mysql/basic" }],
-      },
-      {
-        text: "前端面试",
+        text: "面试题",
         items: [
           { text: "HTML & CSS", link: "/interviews/html&css/" },
           { text: "Typescript", link: "/interviews/typescript/" },
@@ -101,6 +89,6 @@ export default defineConfig({
 
   // 网站 sitemap.xml
   sitemap: {
-    hostname: "https://code.daysnap.cn",
+    hostname: "https://review.ajuan.me",
   },
 });
