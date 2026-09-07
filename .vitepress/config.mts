@@ -38,6 +38,7 @@ export default defineConfig({
         text: "面试题",
         items: [
           { text: "HTML & CSS", link: "/interviews/html&css/" },
+          { text: "Javascript", link: "/interviews/javascript/" },
           { text: "Typescript", link: "/interviews/typescript/" },
         ],
       },
